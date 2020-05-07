@@ -10,6 +10,15 @@ The implementation is heavily based on the video of Computerphile starred Profes
 
 The video [https://www.youtube.com/watch?v=G_UYXzGuqvM](https://www.youtube.com/watch?v=G_UYXzGuqvM) 
 
+## Todo
+
+1. Check the fonction `-i`
+2. Make a graphical interface in python
+3. Make a website
+4. Add photo or live camera as input type
+
+
+
 ## Usage
 
 ```sh
