@@ -8,11 +8,14 @@ This project is aim to solve sudoku puzzles.  The resolution is done via recursi
 
 The implementation is heavily based on the video of Computerphile starred Professor Thorsten Altenkirch from Nottingham.  
 
-The video [https://www.youtube.com/watch?v=G_UYXzGuqvM](https://www.youtube.com/watch?v=G_UYXzGuqvM) 
+The video is available on Youtube at [https://www.youtube.com/watch?v=G_UYXzGuqvM](https://www.youtube.com/watch?v=G_UYXzGuqvM).
 
 ## Todo
 
-1. Check the fonction `-i`
+1. Check the fonction `-i`: KO
+2. Add function direct row input by defaut: OK
+3. Add an output option between *ascii* or *matrix*: OK
+4. Add a KeyboardInterrupt function: OK
 2. Make a graphical interface in python
 3. Make a website
 4. Add photo or live camera as input type
@@ -23,14 +26,16 @@ The video [https://www.youtube.com/watch?v=G_UYXzGuqvM](https://www.youtube.com/
 
 ```sh
 $ python3 sudoku-solver.py -h
-usage: sudoku-solver.py [-h] [-c LIGNE] [-i INPUT]
+usage: sudoku-solver.py [-h] [-c LIGNE] [-i INPUT] [-o OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
   -c LIGNE, --ligne LIGNE
                         Give grid as a string of number row by row
   -i INPUT, --input INPUT
-                        Read the matrix from a file
+                        Read the grid from a file
+  -o OUTPUT, --output OUTPUT
+                        Print a ascii or matrix output
 ```
 
 The usage of **numpy** is optionnal.

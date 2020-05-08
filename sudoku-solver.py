@@ -1,6 +1,7 @@
 #/usr/bin/env python3
 import numpy as np
-import argparse,sys
+import argparse
+import pdb
 
 # grid = [[5,3,0,0,7,0,0,0,0],
 #         [6,0,0,1,9,5,0,0,0],
@@ -23,20 +24,29 @@ def oneliner2grid(oneliner):
 	    grid.append(a[x:x+9])
 	return grid	
 
-def input2grid(file):
+def file2grid(file):
+	global grid
+	grid = list(range(9))
 	f = open(file, 'r')
 	for r, row in enumerate(f):
 	    for c, cell in enumerate(row):
 	        if cell == '\n': 
 	        	continue
 	        try:
-	            int(cell)
 	            grid[r][c] = int(cell)
 	        except Exception as e:
 	            grid[r][c] = '0'
+	f.close()
 
-# https://stackoverflow.com/questions/37952851/formating-sudoku-grids-python-3
+def input2grid():
+	global grid
+	grid = list(range(9))
+	for i in range(9):
+	    inp = input("row " + str(i + 1) + ": ")
+	    grid[i] = list(map(int, list(inp)))
+
 def print_sudoku(grid):
+	# https://stackoverflow.com/questions/37952851/formating-sudoku-grids-python-3
     print("+" + "---+"*9)
     for i, row in enumerate(grid):
         print(("|" + " {}   {}   {} |"*3).format(*[x if x != 0 else " " for x in row]))
@@ -64,7 +74,7 @@ def possible(y,x,n):
 				return False
 	return True
 
-def solve():
+def solve(output):
 	global grid
 	for y in range(0,9):
 		for x in range(0,9):
@@ -72,14 +82,20 @@ def solve():
 				for n in range(1,10):
 					if possible(y,x,n):
 						grid[y][x] = n
-						solve()
+						# pdb.set_trace()
+						solve(output)
 						grid[y][x] = 0
 				return
-	# Display solution as a matrix			
-	# print(np.matrix(grid))
-	# Display solution as ascii table
-	print_sudoku(grid)
+	if output == "ascii":
+		# Display solution as ascii table
+		print_sudoku(grid)
 
+	if output == "matrix":
+		# Display solution as a matrix			
+		print(np.matrix(grid))
+	else:
+		# Display solution as ascii table
+		print_sudoku(grid)
 	# Multiple solutions ?
 	input("More ?")
 
@@ -92,19 +108,52 @@ def main():
 	   help="Give grid as a string of number row by row")
 	ap.add_argument("-i", "--input", required=False,
 	   help="Read the grid from a file")
+	ap.add_argument("-o", "--output", required=False,
+	   help="Print a ascii or matrix output")
 	args = vars(ap.parse_args())
 
-	# One arg only not both
-	if args['input'] and args['ligne']:
-		print("Don't handle both arguments.")
+	if args['output'] != 'matrix' and args['output'] != 'ascii'and args['output']:
+		print('Select either matrix or ascii output')
 		exit()
-	if args['ligne']:
-		oneliner2grid(args['ligne'])
-		print_sudoku(grid)
-		solve()
-	if args['input']:
-		input2grid(args['input'])
-		print_sudoku(grid)
-		solve()
+	if not args['output'] or args['output'] == 'ascii':
+		# One arg only not both
+		if args['input'] and args['ligne']:
+			print("Don't handle both arguments.")
+			exit()
+		if args['ligne']:
+			oneliner2grid(args['ligne'])
+			print_sudoku(grid)
+			solve(ascii)
+		if args['input']:
+			file2grid(args['input'])
+			print_sudoku(grid)
+			solve(ascii)
+		if not args['input'] and not args['ligne']:
+			print("Please enter the rows of the sudoku. Use zero (0) for empty fields. No spaces.")
+			input2grid()
+			print_sudoku(grid)
+			solve(ascii)
+	if args['output'] == 'matrix':
+		# One arg only not both
+		if args['input'] and args['ligne']:
+			print("Don't handle both arguments.")
+			exit()
+		if args['ligne']:
+			oneliner2grid(args['ligne'])
+			print_sudoku(grid)
+			solve(output='matrix')
+		if args['input']:
+			file2grid(args['input'])
+			print_sudoku(grid)
+			solve(output='matrix')
+		if not args['input'] and not args['ligne']:
+			print("Please enter the rows of the sudoku. Use zero (0) for empty fields. No spaces.")
+			input2grid()
+			print_sudoku(grid)
+			solve(output='matrix')
 
-main()
+try:
+	main()
+except KeyboardInterrupt:
+	print("\n[*] Bye")
+	exit()
